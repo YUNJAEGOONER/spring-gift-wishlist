@@ -1,5 +1,6 @@
 package gift;
 
+import gift.entity.Member;
 import gift.service.JwtAuthService;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +27,8 @@ public class LoggedInMemberArgumentResolver implements HandlerMethodArgumentReso
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(LoggedInMember.class);
+        return parameter.hasParameterAnnotation(LoggedInMember.class)
+                && parameter.getParameterType().equals(Member.class);
     }
 
     @Override

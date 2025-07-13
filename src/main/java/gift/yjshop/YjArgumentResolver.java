@@ -1,5 +1,6 @@
 package gift.yjshop;
 
+import gift.entity.Member;
 import gift.exception.ErrorCode;
 import gift.exception.MyException;
 import gift.service.MemberService;
@@ -30,7 +31,8 @@ public class YjArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(YjUser.class);
+        return parameter.hasParameterAnnotation(YjUser.class)
+                &&parameter.getParameterType().equals(Member.class);
     }
 
     @Override
