@@ -1,10 +1,9 @@
-package gift.interceptor;
+package gift.infra.interceptor;
 
 import gift.dto.Role;
 import gift.exception.ErrorCode;
 import gift.exception.MyException;
 import gift.service.JwtAuthService;
-import gift.yjshop.service.AuthServiceJWTandCookie;
 import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

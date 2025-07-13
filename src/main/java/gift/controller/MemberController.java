@@ -55,7 +55,8 @@ public class MemberController {
         }
         //서버에 저장된 id-pw 쌍과 일치한다면 토큰을 발급
         Member member = memberService.getMemberByEmail(memberRequestDto.email()).get();
-        String token = "Bearer " + jwtAuthService.createJwt(member.getEmail(), member.getMemberId(), member.getRole());
+        //토큰 발급 시, Bearer x
+        String token = jwtAuthService.createJwt(member.getEmail(), member.getMemberId(), member.getRole());
         response.addHeader("Authorization", token);
         return ResponseEntity.ok().body(new JwtResponseDto(token));
     }

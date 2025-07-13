@@ -1,4 +1,4 @@
-package gift.interceptor;
+package gift.infra.interceptor;
 
 import gift.exception.ErrorCode;
 import gift.exception.MyException;

@@ -1,7 +1,8 @@
-package gift;
+package gift.infra.config;
 
-import gift.interceptor.AdminCheckInterceptor;
-import gift.interceptor.LoginCheckInterceptor;
+import gift.infra.LoggedInMemberArgumentResolver;
+import gift.infra.interceptor.AdminCheckInterceptor;
+import gift.infra.interceptor.LoginCheckInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
