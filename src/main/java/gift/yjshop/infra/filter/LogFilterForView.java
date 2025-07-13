@@ -1,44 +1,41 @@
-package gift.infra.filter;
+package gift.yjshop.infra.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.MemberRequestDto;
 import gift.entity.Member;
 import gift.exception.ErrorCode;
 import gift.exception.MyException;
-import gift.service.JwtAuthService;
 import gift.service.MemberService;
+import gift.yjshop.service.AuthServiceJWTandCookie;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoginFilter implements Filter {
+public class LogFilterForView implements Filter {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(LogFilterForView.class);
+
     private final MemberService memberService;
-    private final JwtAuthService jwtAuthService;
-    private final ObjectMapper objectMapper;
+    private final AuthServiceJWTandCookie authServiceJWTandCookie;
 
-    public LoginFilter(MemberService memberService, JwtAuthService jwtAuthService, ObjectMapper objectMapper){
+    public LogFilterForView(MemberService memberService, AuthServiceJWTandCookie authServiceJWTandCookie){
         this.memberService = memberService;
-        this.jwtAuthService = jwtAuthService;
-        this.objectMapper = objectMapper;
+        this.authServiceJWTandCookie = authServiceJWTandCookie;
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("필터 등록 완료,,,");
+        log.info("[LogFilterForView]필터 등록 완료,,,");
     }
 
     @Override
@@ -52,19 +49,18 @@ public class LoginFilter implements Filter {
         String Method = httpServletRequest.getMethod();
 
         //로그인 요청에 대해서만 동작하는 필터임...
-        if(url.equals("/api/members/login") && Method.equals("POST")){
+        if(url.equals("/view/login") && Method.equals("POST")){
 
             log.info("로그인 필터 is working,,,,");
 
-            BufferedReader inputStream = httpServletRequest.getReader();
-            MemberRequestDto memberRequestDto = objectMapper.readValue(inputStream, MemberRequestDto.class);
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-            //HttpServletRequest에서 인증정보를 파싱하고
-            String email = memberRequestDto.email();
-            String password = memberRequestDto.password();
+            System.out.println("email = " + email);
+            System.out.println("password = " + password);
 
             //인증실패예외를 반환하고 이를 Http Response로 렌더링하는 작업이 필요할것 같아요.
-            if(email == null || password == null){
+            if(email.isBlank() || password.isBlank()){
                 throw new MyException(ErrorCode.EMAIL_PASSWORD_REQUIRED);
             }
 
@@ -74,13 +70,18 @@ public class LoginFilter implements Filter {
             }
 
             Member member = memberService.getMemberByEmail(email).get();
-            String token = jwtAuthService.createJwt(email, member.getMemberId(), member.getRole());
+            String token = authServiceJWTandCookie.createJwt(email, member.getMemberId(), member.getRole());
 
-            httpServletResponse.addHeader("Authorization", token);
-            log.info("토큰 생성 완료");
+            //쿠키 발행 (쿠키에 토큰을 저장)
+            Cookie tcookie = new Cookie("yjtoken", token);
+            tcookie.setPath("/");
+            httpServletResponse.addCookie(tcookie);
+
+            //로그인 성공시
+            request.setAttribute("role", member.getRole());
+            log.info("쿠키 생성 완료");
         }
         //다음 필터가 있다면 동작해라;
         chain.doFilter(request, response);
     }
 }
-

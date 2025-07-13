@@ -4,7 +4,7 @@ import gift.dto.wish.WishRequestDto;
 import gift.dto.wish.WishResponseDto;
 import gift.entity.Member;
 import gift.service.WishListService;
-import gift.yjshop.YjUser;
+import gift.yjshop.infra.YjUser;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.stereotype.Controller;

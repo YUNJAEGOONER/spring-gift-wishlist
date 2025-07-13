@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>와이제이쇼핑 : 로그인</title>
+  <style>
+
+    #loginInterceptor-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8f8f8;
+    }
+
+    #loginInterceptor-page .loginInterceptor-form-container {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    #loginInterceptor-page form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #loginInterceptor-page .form-title {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 25px;
+    }
+
+    #loginInterceptor-page .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 30px; /* 입력칸 사이 넉넉한 간격 */
+    }
+
+    #loginInterceptor-page .input-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #loginInterceptor-page input[type="email"],
+    #loginInterceptor-page input[type="password"] {
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    #loginInterceptor-page .warning-message {
+      color: red;
+      font-size: 13px;
+      margin-top: 5px;
+      white-space: pre-line;
+      line-height: 1.4;
+    }
+
+    #loginInterceptor-page input[type="submit"],
+    #loginInterceptor-page button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    #loginInterceptor-page input[type="submit"] {
+      background-color: #90ee90;
+    }
+
+    #loginInterceptor-page button {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+<div id="loginInterceptor-page">
+  <div class="loginInterceptor-form-container">
+    <form th:action="@{/view/login}" method="post">
+      <div class="form-title">로그인</div>
+
+      <!-- 이메일 입력 -->
+      <div class="input-group">
+        <label>이메일</label>
+        <input type="email" name="email" placeholder="이메일을 입력하세요">
+      </div>
+
+      <!-- 비밀번호 입력 -->
+      <div class="input-group">
+        <label>비밀번호</label>
+        <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+        <div th:text="${errormsg}" class="warning-message"></div>
+      </div>
+
+      <input type="submit" value="로그인">
+    </form>
+
+    <!-- 회원가입 버튼 -->
+    <button th:onclick="|location.href='@{/view/registerform}'|">회원 가입</button>
+  </div>
+</div>
+</body>
+</html>

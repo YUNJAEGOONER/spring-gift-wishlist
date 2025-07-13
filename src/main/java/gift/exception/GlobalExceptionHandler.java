@@ -11,19 +11,20 @@ public class GlobalExceptionHandler {
     public String handleMyException(MyException e, Model model){
 
         System.out.println("e.getErrorCode().getMessage() = " + e.getErrorCode().getMessage());
-
-        model.addAttribute("errorMsg", e.getErrorCode().getMessage());
-        if(e.getErrorCode().equals(ErrorCode.PRODUCT_NOT_FOUND)) {
-            return "ProoductNotFoun";
-        }
-        if(e.getErrorCode().equals(ErrorCode.MEMBER_NOT_FOUND)){
-            return "members/membernotfound";
-        }
-        if(e.getErrorCode().equals(ErrorCode.JWT_VALIDATION_FAIL)){
-            return "redirect:/view/products/list";
-        }
-
         return null;
+//
+//        model.addAttribute("errorMsg", e.getErrorCode().getMessage());
+//        if(e.getErrorCode().equals(ErrorCode.PRODUCT_NOT_FOUND)) {
+//            return "ProoductNotFoun";
+//        }
+//        if(e.getErrorCode().equals(ErrorCode.MEMBER_NOT_FOUND)){
+//            return "members/membernotfound";
+//        }
+//        if(e.getErrorCode().equals(ErrorCode.JWT_VALIDATION_FAIL)){
+//            return "redirect:/view/products/list";
+//        }
+//
+//        return null;
     }
 
 }

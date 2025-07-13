@@ -5,6 +5,7 @@ import gift.dto.MemberRequestDto;
 import gift.exception.ErrorCode;
 import gift.exception.MyException;
 import gift.repository.MemberRepository;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class MemberService {
     }
 
     //TODO:로그인 기능 -> 이메일과 비밀번호가 일치하는지 확인하는 로직
-    public Boolean checkMember(MemberRequestDto memberRequestDto){
+    public Boolean checkMember(@Valid MemberRequestDto memberRequestDto){
         Optional<Member> member = memberRepository.findMemberByEmailAndPassword(memberRequestDto.email(), memberRequestDto.password());
         if(member.isEmpty()){
             return false;

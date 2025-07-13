@@ -34,11 +34,8 @@ public class LoggedInMemberArgumentResolver implements HandlerMethodArgumentReso
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-
-        String token = "";
-        if(webRequest instanceof HttpServletRequest httpServletRequest){
-            token = httpServletRequest.getHeader("Authorization"); //토큰 꺼내기
-        }
+        HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
+        String token = httpServletRequest.getHeader("Authorization"); //토큰 꺼내기
         Long id = jwtAuthService.getMemberId(token); //토큰에서 정보 가져오기
         log.info("LoggedInMemberArgumentResolver(memberId = " + id.toString() + ")");
         return memberService.findMember(id).get();

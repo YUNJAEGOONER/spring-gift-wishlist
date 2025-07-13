@@ -1,27 +1,24 @@
-package gift.yjshop.interceptor;
+package gift.yjshop.infra.interceptor;
 
-import gift.exception.ErrorCode;
-import gift.exception.MyException;
+import gift.dto.Role;
 import gift.yjshop.service.AuthServiceJWTandCookie;
 import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.Cookie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.lang.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Component
-public class LoginChecker implements HandlerInterceptor {
+public class AdminChecker implements HandlerInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginChecker.class);
+    private static final Logger log = LoggerFactory.getLogger(AdminChecker.class);
     private final AuthServiceJWTandCookie authServiceJWTandCookie;
 
-    public LoginChecker(AuthServiceJWTandCookie authServiceJWTandCookie) {
+    public AdminChecker(AuthServiceJWTandCookie authServiceJWTandCookie) {
         this.authServiceJWTandCookie = authServiceJWTandCookie;
     }
 
@@ -29,7 +26,7 @@ public class LoginChecker implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //컨트롤러가 호출되기 전에 실행됨
-        log.info("[LoginChecker] preHandle");
+        log.info("[adminchecker] preHandle");
         String token = null;
 
         try{
@@ -56,17 +53,14 @@ public class LoginChecker implements HandlerInterceptor {
         log.info("로그인 정보를 확인 중,,,");
         authServiceJWTandCookie.checkValidation(token);
         log.info("JWT 토큰 검증 성공,,,");
-        return true; //컨트롤러가 동작
-    }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {;
-        log.info("[interceptor] postHandle");
-    }
+        if(Role.valueOf(authServiceJWTandCookie.getMemberRole(token)).equals(Role.ADMIN)){
+            log.info("관리자 인증 완료,,,");
+            return true; //컨트롤러가 동작
+        }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-        log.info("[interceptor] afterCompletion");
+        log.info("일반 사용자 인증 완료,,,");
+        return false; //컨트롤러가 동작하지 않음
     }
 
 }

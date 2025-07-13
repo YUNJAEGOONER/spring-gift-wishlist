@@ -33,7 +33,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         //토큰이 없는 경우
         if(token == null){
             //로그인하는 페이지로 유도
-            //throw new LoggedInRequiredException("로그인이 필요합니다.");
             throw new MyException(ErrorCode.LOGIN_REQUIRED_FAIL);
         }
 

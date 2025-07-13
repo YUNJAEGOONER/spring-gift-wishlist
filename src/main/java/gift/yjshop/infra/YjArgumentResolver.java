@@ -1,4 +1,4 @@
-package gift.yjshop;
+package gift.yjshop.infra;
 
 import gift.entity.Member;
 import gift.exception.ErrorCode;

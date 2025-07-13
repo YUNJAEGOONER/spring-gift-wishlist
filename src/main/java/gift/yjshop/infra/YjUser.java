@@ -1,4 +1,4 @@
-package gift.yjshop;
+package gift.yjshop.infra;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
