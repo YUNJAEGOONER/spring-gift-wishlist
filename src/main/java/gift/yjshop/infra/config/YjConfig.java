@@ -1,8 +1,8 @@
-package gift.yjshop;
+package gift.yjshop.infra.config;
 
-import gift.yjshop.interceptor.AdminChecker;
-import gift.yjshop.interceptor.LoginInterceptor;
-import gift.yjshop.interceptor.LoginChecker;
+import gift.yjshop.infra.YjMemberArgumentResolver;
+import gift.yjshop.infra.interceptor.AdminChecker;
+import gift.yjshop.infra.interceptor.LoginChecker;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,33 +12,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class YjConfig implements WebMvcConfigurer {
 
-    private final LoginInterceptor loginInterceptor;
     private final LoginChecker loginChecker;
     private final AdminChecker adminChecker;
-    private final YjArgumentResolver yjArgumentResolver;
+    private final YjMemberArgumentResolver yjMemberArgumentResolver;
 
 
     public YjConfig(
-            LoginInterceptor loginInterceptor,
             LoginChecker loginChecker, AdminChecker adminChecker,
-            YjArgumentResolver yjArgumentResolver
+            YjMemberArgumentResolver yjMemberArgumentResolver
     ) {
-        this.loginInterceptor = loginInterceptor;
         this.loginChecker = loginChecker;
         this.adminChecker = adminChecker;
-        this.yjArgumentResolver = yjArgumentResolver;
+        this.yjMemberArgumentResolver = yjMemberArgumentResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(yjArgumentResolver);
+        resolvers.add(yjMemberArgumentResolver);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(loginInterceptor)
-                        .addPathPatterns("/view/register", "/view/login");
 
         registry.addInterceptor(loginChecker)
                 .addPathPatterns("/view/my/**");

@@ -1,5 +1,6 @@
-package gift.yjshop;
+package gift.yjshop.infra;
 
+import gift.entity.Member;
 import gift.exception.ErrorCode;
 import gift.exception.MyException;
 import gift.service.MemberService;
@@ -16,13 +17,13 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-public class YjArgumentResolver implements HandlerMethodArgumentResolver {
+public class YjMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final Logger log = LoggerFactory.getLogger(YjArgumentResolver.class);
+    private static final Logger log = LoggerFactory.getLogger(YjMemberArgumentResolver.class);
     private final MemberService memberService;
     private final AuthServiceJWTandCookie authServiceJWTandCookie;
 
-    public YjArgumentResolver(
+    public YjMemberArgumentResolver(
             MemberService memberService, AuthServiceJWTandCookie authServiceJWTandCookie) {
         this.memberService = memberService;
         this.authServiceJWTandCookie = authServiceJWTandCookie;
@@ -30,7 +31,8 @@ public class YjArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(YjUser.class);
+        return parameter.hasParameterAnnotation(YjUser.class)
+                &&parameter.getParameterType().equals(Member.class);
     }
 
     @Override

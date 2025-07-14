@@ -1,4 +1,4 @@
-package gift;
+package gift.infra;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

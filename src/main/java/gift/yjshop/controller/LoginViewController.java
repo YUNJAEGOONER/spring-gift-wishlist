@@ -5,8 +5,6 @@ import gift.dto.Role;
 import gift.entity.Member;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Optional;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -48,7 +46,7 @@ public class LoginViewController {
             BindingResult bindingResult,
             HttpServletResponse response,
             HttpServletRequest request
-    ) throws IOException {
+    ){
 
         if(memberService.getMemberByEmail(memberRequestDto.email()).isPresent()){
             bindingResult.addError(new FieldError("memberRequestDto", "email", "이미 사용중인 이메일 입니다."));
@@ -74,35 +72,26 @@ public class LoginViewController {
         return "/yjshop/user/login";
     }
 
+
     //로그인 기능 -> 토큰을 반환(쿠키에 저장)
     @PostMapping("/login")
-    public String login(
-            @ModelAttribute @Valid MemberRequestDto memberRequestDto,
-            BindingResult bindingResult,
-            HttpServletResponse response,
-            HttpServletRequest request
-    ) {
+    public String login(HttpServletRequest request) {
 
-        if(!memberService.checkMember(memberRequestDto)){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            bindingResult.addError(new FieldError("memberRequestDto", "email", "아이디 또는 비밀번호가 일치하지 않습니다."));
-        }
+        Role role = (Role) request.getAttribute("role");
 
-        if(bindingResult.hasErrors()){
-            return "/yjshop/user/login";
-        }
-
-        //서버에 저장된 id-pw 쌍과 일치한다면 토큰을 발급
-        Member member = memberService.getMemberByEmail(memberRequestDto.email()).get();
-        request.setAttribute("memberId", member.getMemberId());
-        request.setAttribute("role", member.getRole());
-        response.setStatus(HttpServletResponse.SC_CREATED);
-
-        if(member.getRole().equals(Role.ADMIN)){
+        //관리자 로그인 시, -> 관리자 페이지로 이동
+        if(role.equals(Role.ADMIN)){
             return "redirect:/view/admin/products";
         }
-
         return "redirect:/view/products/list";
+
+    }
+
+    @PostMapping("/login/error")
+    public String loginError(HttpServletRequest request, Model model){
+        System.out.println("request = " + request.getAttribute("errormsg"));
+        model.addAttribute("errormsg", request.getAttribute("errormsg"));
+        return "/yjshop/user/loginerror";
     }
 
     //로그아웃 기능 -> 토큰을 만료시킴

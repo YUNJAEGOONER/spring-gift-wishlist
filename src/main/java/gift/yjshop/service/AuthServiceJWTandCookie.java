@@ -25,9 +25,6 @@ public class AuthServiceJWTandCookie {
 
     //payload의 정보를 추출하는 함수
     public String getMemberRole(String token){
-
-        System.out.println("token = " + token);
-
         return Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .build()

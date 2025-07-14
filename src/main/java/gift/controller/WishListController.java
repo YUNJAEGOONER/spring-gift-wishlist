@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.dto.wish.WishRequestDto;
 import gift.dto.wish.WishResponseDto;
-import gift.LoggedInMember;
+import gift.infra.LoggedInMember;
 import gift.entity.Member;
 import gift.service.WishListService;
 import jakarta.validation.Valid;
@@ -29,14 +29,14 @@ public class WishListController {
         this.wishListService = wishListService;
     }
 
-    //TODO: WishList에 담긴 상품 목록을 조회
+    //WishList에 담긴 상품 목록을 조회
     @GetMapping
     public ResponseEntity<List<WishResponseDto>> getWishList(@LoggedInMember Member member){
         List<WishResponseDto> myWishList = wishListService.getList(member.getMemberId());
         return ResponseEntity.ok(myWishList);
     }
 
-    //TODO: 위시리스트에 상품을 추가
+    //위시리스트에 상품을 추가
     @PostMapping("/add")
     public ResponseEntity<WishResponseDto> addToWishList(
             @RequestBody @Valid WishRequestDto wishRequestDto, //상품ID, 수량
@@ -47,7 +47,7 @@ public class WishListController {
         return new ResponseEntity<>(wishResponseDto, HttpStatus.CREATED);
     }
 
-    //TODO: 위시 리스트에 담긴 상품을 삭제
+    //위시 리스트에 담긴 상품을 삭제
     @DeleteMapping("/remove/{wishListId}")
     public ResponseEntity<Void> removeWishList(@PathVariable Long wishListId){
         wishListService.removeFromWishList(wishListId);
