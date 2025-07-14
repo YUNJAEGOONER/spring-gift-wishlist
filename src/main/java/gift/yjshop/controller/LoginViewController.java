@@ -89,15 +89,18 @@ public class LoginViewController {
         return "redirect:/view/products/list";
     }
 
+//    @PostMapping("/login/error")
+//    public ModelAndView loginError(HttpServletRequest request){
+//        ModelAndView modelAndView = (ModelAndView) request.getAttribute("errorpage");
+//        return modelAndView;
+//    }
+
     @PostMapping("/login/error")
-    public ModelAndView loginError(HttpServletRequest request){
-        ModelAndView modelAndView = (ModelAndView) request.getAttribute("errorpage");
-        return modelAndView;
+    public String loginError(HttpServletRequest request, Model model){
+        System.out.println("request = " + request.getAttribute("errormsg"));
+        model.addAttribute("errormsg", request.getAttribute("errormsg"));
+        return "/yjshop/user/loginerror";
     }
-
-
-
-
 
     //로그아웃 기능 -> 토큰을 만료시킴
     @GetMapping("/my/logout")
@@ -110,6 +113,8 @@ public class LoginViewController {
     }
 
 }
+
+
 
 
 

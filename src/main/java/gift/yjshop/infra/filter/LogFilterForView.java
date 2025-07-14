@@ -56,9 +56,6 @@ public class LogFilterForView implements Filter {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 
-            System.out.println("email = " + email);
-            System.out.println("password = " + password);
-
             //인증실패예외를 반환하고 이를 Http Response로 렌더링하는 작업이 필요할것 같아요.
             if(email.isBlank() || password.isBlank()){
                 throw new MyException(ErrorCode.EMAIL_PASSWORD_REQUIRED);
